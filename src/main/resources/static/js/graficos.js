@@ -22,9 +22,9 @@ function crearGrafico() {
                         axis: 'x',
                         data: dataPoints[index],
                         fill: false,
-                        borderColor: 'rgba(33,186,69, 1)',
+                        borderColor: 'rgb(97, 130, 100)',
                         borderWidth: 2,
-                        pointBackgroundColor: 'rgba(33,186,69, 1)', // Color de los puntos
+                        pointBackgroundColor: 'rgb(97, 130, 100)', // Color de los puntos
                         pointRadius: 5 // Tamaño de los puntos
 
                     }]
@@ -86,8 +86,8 @@ function realizarPing() {
                         var point = dataPoints[index];
                         point.push(0);
                         dataPoints[index] = point;
-                        misGraficos[index].data.datasets[0].borderColor = 'rgba(75, 192, 192, 1)';
-                        misGraficos[index].data.datasets[0].pointBackgroundColor = 'rgba(75, 192, 192, 1)';
+                        misGraficos[index].data.datasets[0].borderColor = 'rgb(97, 130, 100)';
+                        misGraficos[index].data.datasets[0].pointBackgroundColor = 'rgb(97, 130, 100)';
 
                         // Si no es alcanzable, quitar la clase 
                         document.querySelectorAll('.grafico-container')[index].classList.remove('order-1');
