@@ -1,5 +1,5 @@
-# PasswordManager-BackEnd
-Api Rest para app de gestion de credenciales.  En conjunto con PasswordManager-FrontEnd.
+# Monitoreo de Grupos Electrogenos
+Es una aplicacion enladata para el monitoreo de grupos electrogenos en cada Shelter de la red FTTH.
 
-La aplicacion estara enfocada al manejo de usuarios y contraseñas de todas las aplicaciones intervinientes en las operatorias diarias de la empresa.
-En la misma se podran dejar registradas las credenciales y despues de un cierto periodo la aplicacion enviara un aviso a la persona que corresponda para que actualice sus credenciales.
+Cada Grupo electrogeno y banco de bateria esta conectado a una ONU, la cual se enciende al encender el grupo. A cada una de estas ONUs se le realiza un Ping y se grafica la respuesta en graficos de linea.
+Cuando el grupo esta encendido el Ping es correcto por lo que se da aviso mediante diferentes alertas que el grupo esta encendido y se registra un Log de actividad. De esta forma queda registrado cuanto tiempo de uso tuvo el grupo electrogeno y cuando fue la ultima vez que se encendio. 
