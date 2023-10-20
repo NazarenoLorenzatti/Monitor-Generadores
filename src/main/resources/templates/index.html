@@ -6,35 +6,24 @@
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"
                 integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>      
-
+        <link href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.4/rg-1.3.1/datatables.min.css" rel="stylesheet"/></link>
+        <script src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.4/rg-1.3.1/datatables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/estilos.css"/>
         <script type="text/javascript" th:src="@{/js/graficos.js}"></script>        
         <script type="text/javascript" th:src="@{/js/funciones.js}"></script>
-
         <link rel="stylesheet" type="text/css" href="/fontawasome/all.css"/>
         <script type="text/javascript" th:src="@{/fontawasome/all.js}"></script>
-
         <script type="text/javascript" th:src="@{/semantic/semantic.js}"></script>
-        <link rel="stylesheet" type="text/css" href="/semantic/semantic.css"/>      
-
-        <link href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.4/rg-1.3.1/datatables.min.css" rel="stylesheet"/></link>
-        <script src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.4/rg-1.3.1/datatables.min.js"></script>
-
+        <link rel="stylesheet" type="text/css" href="/semantic/semantic.css"/>   
     </head>
-
 
     <body>
         <div class="container">
             <div class="header cabecera"> 
-
-                <h2 class="ui header">
-                    <div class="content">
-                        Monitoreo de Generadores
-                        <div class="sub header">UltraFibra</div>
-                    </div>
-                </h2>
+                <div class="img-container">
+                    <img src="/img/UltraFibra.png" alt="alt"/>
+                </div>
             </div>
-
             <!-- Modal para guardar Host -->
             <div class="ui modal" id="nuevoHostModal">
                 <div class="btn-close">
@@ -61,7 +50,6 @@
                     </form>
                 </div>
             </div>
-
             <!-- Modal para Editar Host -->
             <div class="ui modal" id="editarHostModal">
                 <div class="btn-close">
@@ -92,17 +80,16 @@
                     </form>
                 </div>
             </div>
-
             <div class="cuerpo">
                 <div class="ui grid">
                     <div class="four wide column wide-menu">
                         <div class="menu-der ui vertical fluid tabular menu">
                             <div class="botones-container">
                                 <div class="boton">
-                                    <a class="ui fluid green button" th:href="@{/}">Graficos</a>
+                                    <a class="ui fluid green button" th:href="@{/}">Graficos </a>
                                 </div>                               
                                 <div class="boton">
-                                    <button class="ui fluid teal button" onclick="nuevoHost()">Agregar Ip</button>
+                                    <button class="ui fluid green button" onclick="nuevoHost()">Agregar Ip</button>
                                 </div>                              
                             </div>
                         </div>
@@ -111,25 +98,23 @@
                         <div class="ui segment">
                             <div class="grafico-container" th:if="${session.dibujarGraficos == true}" th:each="host, hostIndex : ${session.hosts}">
                                 <div class="grafico" th:data-nombre-host="${host.nombreHost}">
-                                    <canvas th:id="${host.ipHost}"></canvas>
-                                    <div class="btns-grafico">
-                                        <a class="ui green inverted button" th:href="@{/host/obtenerLog/{ipHost}(ipHost=${host.getIpHost()})}">
-                                            Log
-                                        </a>
-                                        <a class="ui green inverted button editar-host" th:data-id-host="${host.idHost}" th:data-ip-host="${host.ipHost}" th:data-nombre-host="${host.nombreHost}">
-                                            Editar
-                                        </a>
-                                        <a class="ui red inverted button" th:href="@{/host/eliminarHost/{idHost}(idHost=${host.getIdHost()})}">
-                                            Eliminar
-                                        </a>
-                                    </div>
+                                    <canvas th:id="${host.ipHost}"></canvas>                                   
+                                </div>
+                                <div class="btns-grafico">
+                                    <a class="ui fluid green button" th:href="@{/host/obtenerLog/{ipHost}(ipHost=${host.getIpHost()})}">
+                                        Log
+                                    </a>
+                                    <a class="ui fluid green button editar-host" th:data-id-host="${host.idHost}" th:data-ip-host="${host.ipHost}" th:data-nombre-host="${host.nombreHost}">
+                                        Editar
+                                    </a>
+                                    <a class="ui fluid red button" th:href="@{/host/eliminarHost/{idHost}(idHost=${host.getIdHost()})}">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
                                 </div>
                             </div>
-
                             <script th:inline="javascript">
                                 crearGrafico();
                             </script>
-
                             <div class="logs" th:if="${session.tablaLog == true}">
                                 <div class="tabla">
                                     <table id="tabla-paginada" class="ui definition green table">
@@ -195,11 +180,14 @@
                 </div>
             </div>             
         </div>
-
         <div class="pie-pagina">
-
+            <div class="copy-container">
+                <i class="fa-regular fa-copyright"> </i> CopyRight - UltraFibra
+            </div>  
+            <div class="autor-container">
+                <div><b>Desarrollo:</b> Lorenzatti Nazareno</div>
+                <div>nl.loragro@gmail.com</div>
+            </div>
         </div>
-
-
     </body>
 </html>
