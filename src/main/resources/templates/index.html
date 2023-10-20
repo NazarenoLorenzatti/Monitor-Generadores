@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Gráfico con Thymeleaf y Chart.js</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>      
+
+        <link rel="stylesheet" type="text/css" href="/css/estilos.css"/>
+        <script type="text/javascript" th:src="@{/js/graficos.js}"></script>        
+        <script type="text/javascript" th:src="@{/js/funciones.js}"></script>
+
+        <link rel="stylesheet" type="text/css" href="/fontawasome/all.css"/>
+        <script type="text/javascript" th:src="@{/fontawasome/all.js}"></script>
+
+        <script type="text/javascript" th:src="@{/semantic/semantic.js}"></script>
+        <link rel="stylesheet" type="text/css" href="/semantic/semantic.css"/>      
+
+        <link href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.4/rg-1.3.1/datatables.min.css" rel="stylesheet"/></link>
+        <script src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.4/rg-1.3.1/datatables.min.js"></script>
+
+    </head>
+
+
+    <body>
+        <div class="container">
+            <div class="header cabecera"> 
+
+                <h2 class="ui header">
+                    <div class="content">
+                        Monitoreo de Generadores
+                        <div class="sub header">UltraFibra</div>
+                    </div>
+                </h2>
+            </div>
+
+            <!-- Modal para guardar Host -->
+            <div class="ui modal" id="nuevoHostModal">
+                <div class="btn-close">
+                    <button class="ui red icon button" id="close-modal-nuevo" onclick="close()">
+                        <i class="fa-solid fa-rectangle-xmark"></i>
+                    </button>
+                </div>  
+                <div class="titulo">
+                    Nuevo Host
+                </div>
+                <div class="formulario-container">
+                    <form class="ui form" action="/host/saveHost" method="POST">
+                        <div class="field">
+                            <label>Host</label>
+                            <input type="text" name="nombreHost" placeholder="Nombre de Host">
+                        </div>
+                        <div class="field">
+                            <label>Ip</label>
+                            <input type="text" name="ipHost" placeholder="Ip del host">
+                        </div>
+                        <div class="field-button">
+                            <button class="ui inverted green button" type="submit">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal para Editar Host -->
+            <div class="ui modal" id="editarHostModal">
+                <div class="btn-close">
+                    <button class="ui red icon button" id="close-modal-editar" onclick="close()">
+                        <i class="fa-solid fa-rectangle-xmark"></i>
+                    </button>
+                </div>                
+                <div class="titulo">
+                    Editar Host
+                </div>
+                <div class="formulario-container">
+                    <form class="ui form" action="/host/editHost" method="POST">
+                        <div class="field">
+                            <label>Id</label>
+                            <input type="text" name="idHost" placeholder="id de Host" readonly="">
+                        </div>
+                        <div class="field">
+                            <label>Host</label>
+                            <input type="text" name="nombreHost" placeholder="Nombre de Host">
+                        </div>
+                        <div class="field">
+                            <label>Ip</label>
+                            <input type="text" name="ipHost" placeholder="Ip del host">
+                        </div>
+                        <div class="field-button">
+                            <button class="ui inverted green button" type="submit">Editar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="cuerpo">
+                <div class="ui grid">
+                    <div class="four wide column wide-menu">
+                        <div class="menu-der ui vertical fluid tabular menu">
+                            <div class="botones-container">
+                                <div class="boton">
+                                    <a class="ui fluid green button" th:href="@{/}">Graficos</a>
+                                </div>                               
+                                <div class="boton">
+                                    <button class="ui fluid teal button" onclick="nuevoHost()">Agregar Ip</button>
+                                </div>                              
+                            </div>
+                        </div>
+                    </div>
+                    <div class="twelve wide stretched column">
+                        <div class="ui segment">
+                            <div class="grafico-container" th:if="${session.dibujarGraficos == true}" th:each="host, hostIndex : ${session.hosts}">
+                                <div class="grafico" th:data-nombre-host="${host.nombreHost}">
+                                    <canvas th:id="${host.ipHost}"></canvas>
+                                    <div class="btns-grafico">
+                                        <a class="ui green inverted button" th:href="@{/host/obtenerLog/{ipHost}(ipHost=${host.getIpHost()})}">
+                                            Log
+                                        </a>
+                                        <a class="ui green inverted button editar-host" th:data-id-host="${host.idHost}" th:data-ip-host="${host.ipHost}" th:data-nombre-host="${host.nombreHost}">
+                                            Editar
+                                        </a>
+                                        <a class="ui red inverted button" th:href="@{/host/eliminarHost/{idHost}(idHost=${host.getIdHost()})}">
+                                            Eliminar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script th:inline="javascript">
+                                crearGrafico();
+                            </script>
+
+                            <div class="logs" th:if="${session.tablaLog == true}">
+                                <div class="tabla">
+                                    <table id="tabla-paginada" class="ui definition green table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Encendido</th>
+                                                <th>Apagado</th>
+                                                <th>Tiempo de Funcionamiento</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="log ,iter : ${logs}">
+                                                <td th:text="${iter.count}">#</td>
+                                                <td th:text="${log.getInicio()}">Inicio</td>
+                                                <td th:text="${log.getFin()}">Fin</td>
+                                                <td>
+                                                    <div th:if="${log.getDiferenciaEnHoras() != null}">
+                                                        <span th:if="${log.getDiferenciaEnHoras() < 1}">
+                                                            <span th:text="${log.getDiferenciaEnHoras() * 60 + ' minutos'}"></span>
+                                                        </span>
+                                                        <span th:unless="${log.getDiferenciaEnHoras() < 1}">
+                                                            <span th:text="${log.getDiferenciaEnHoras() + ' horas'}"></span>
+                                                        </span>
+                                                    </div>
+                                                    <div th:if="${log.getDiferenciaEnHoras() != null}">
+                                                        <span text="0.0"></span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="kpi-column">
+                                    <div class="kpi">
+                                        <div class="titulo-kpi">
+                                            <b>Encendido Mes Actual</b>
+                                        </div>
+                                        <div class="data-kpi">
+                                            <b>[[${tiempoEncendidoMesActual}]] Hs</b>
+                                        </div>                                       
+                                    </div> 
+                                    <div class="kpi">
+                                        <div class="titulo-kpi total-encendido">
+                                            <b>Total Encendido</b>
+                                        </div>
+                                        <div class="data-kpi">
+                                            <b>[[${tiempoEncendido}]] Hs</b>
+                                        </div>                                       
+                                    </div>
+                                    <div class="kpi">
+                                        <div class="titulo-kpi">
+                                            <b>Ultimo Encendido</b>
+                                        </div>
+                                        <div class="data-kpi">
+                                            <span th:text="${#dates.format(ultimoEncendido, 'yyyy-MM-dd')}"></span>
+                                        </div>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>             
+        </div>
+
+        <div class="pie-pagina">
+
+        </div>
+
+
+    </body>
+</html>

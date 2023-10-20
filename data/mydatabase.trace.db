@@ -1,0 +1,6 @@
+2023-10-05 16:52:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "HOST" not found (this database is empty); SQL statement:
+insert into host (ip_host,log_id_log,nombre_host,id_host) values (?,?,?,default) [42104-214]
+2023-10-06 11:51:56 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "HOST" not found (this database is empty); SQL statement:
+insert into host (ip_host,log_id_log,nombre_host,id_host) values (?,?,?,default) [42104-214]
